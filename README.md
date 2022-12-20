@@ -15,7 +15,7 @@ For playing a GBVP2 video ROM on hardware, an MBC5-compatible flash cart is requ
 
 For playing a GBVP2 video ROM on an emulator, you must use an accurate Game Boy Color emulator, such as recent versions of [SameBoy](https://sameboy.github.io) or [BGB](http://bgb.bircd.org). GBVP2 will not work on inaccurate emulators, such as VisualBoyAdvance or GameBoy Online.
 
-For encoding and building a video ROM, you will need a Make, a C compiler (Clang recommended), [rgbds](https://github.com/rednex/rgbds/releases/), and a static binary of [FFMPEG](https://www.johnvansickle.com/ffmpeg/old-releases/) (4.4) located within the build folder.
+For encoding and building a video ROM, you will need a Make, a C compiler (Clang recommended), [rgbds](https://github.com/rednex/rgbds/releases/), and a recent version of [FFMPEG](https://ffmpeg.org/).
 
 ## Format Specifications
 
