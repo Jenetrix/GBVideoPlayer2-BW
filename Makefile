@@ -10,7 +10,7 @@ endif
 OUT := output/$(basename $(notdir $(SOURCE)))
 $(shell mkdir -p $(OUT))
 CC ?= clang
-FFMPEG := ./ffmpeg -loglevel warning -stats -hide_banner
+FFMPEG := ffmpeg -loglevel warning -stats -hide_banner
 
 TITLE = "\033[1m\033[36m"
 TITLE_END = "\033[0m"
@@ -47,7 +47,7 @@ $(OUT)/frames: $(OUT)/video.y4m
 	@echo $(TITLE)Extracting frames...$(TITLE_END)
 	-@rm -rf $@
 	mkdir -p $@
-	$(FFMPEG) -i $^ -coder "raw" $@/%05d.tga
+	$(FFMPEG) -i $^ -coder "raw" -rle 0 $@/%05d.tga
 
 $(OUT)/video.y4m: $(SOURCE)
 	@echo $(TITLE)Resizing video...$(TITLE_END)
