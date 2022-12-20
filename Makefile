@@ -1,5 +1,5 @@
 # Quality: Lower is better. 0 is lossless as far as the format allows.
-QUALITY ?= 4
+QUALITY ?= 0
 
 ifneq ($(MAKECMDGOALS),clean)
 ifeq ($(SOURCE),)
@@ -10,7 +10,7 @@ endif
 OUT := output/$(basename $(notdir $(SOURCE)))
 $(shell mkdir -p $(OUT))
 CC ?= clang
-FFMPEG := ffmpeg -loglevel warning -stats -hide_banner
+FFMPEG := ./ffmpeg -loglevel warning -stats -hide_banner
 
 TITLE = "\033[1m\033[36m"
 TITLE_END = "\033[0m"
@@ -43,17 +43,18 @@ $(OUT)/audio.raw: $(SOURCE)
 	$(eval GAIN := 0$(shell ffmpeg -i $^ -filter:a volumedetect -f null /dev/null 2>&1 | sed -n "s/.*max_volume: -\(.*\) dB/\1/p"))
 	$(FFMPEG) -i $^ -f u8 -acodec pcm_u8 -ar 9198 -filter:a "volume=$(GAIN)dB" $@ 
 
-$(OUT)/frames: $(OUT)/video.mp4
+$(OUT)/frames: $(OUT)/video.y4m
 	@echo $(TITLE)Extracting frames...$(TITLE_END)
 	-@rm -rf $@
 	mkdir -p $@
 	$(FFMPEG) -i $^ -coder "raw" $@/%05d.tga
 
-$(OUT)/video.mp4: $(SOURCE)
+$(OUT)/video.y4m: $(SOURCE)
 	@echo $(TITLE)Resizing video...$(TITLE_END)
-	$(FFMPEG) -i $^ -c:v rawvideo  -vf scale=-2:144 $@.tmp.mp4
-	$(FFMPEG) -i $@.tmp.mp4 -c:v rawvideo  -filter:v "crop=160:144" $@
-	rm $@.tmp.mp4
+	$(FFMPEG) -i $^ -vf scale=-2:144,monochrome $@.tmp.y4m
+	$(FFMPEG) -i $@.tmp.y4m -filter:v "crop=160:144" $@.tmp2.y4m
+	$(FFMPEG) -i $@.tmp2.y4m -f lavfi -i color=gray,scale=160x144 -f lavfi -i color=black,scale=160x144 -f lavfi -i color=white,scale=160x144 -lavfi threshold $@
+	rm $@.tmp.y4m
 	
 clean:
 	rm -rf output
