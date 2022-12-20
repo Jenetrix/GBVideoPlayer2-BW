@@ -1,11 +1,13 @@
 # GBVideoPlayer2
 A new version of [GBVideoPlayer](https://github.com/LIJI32/GBVideoPlayer) with higher resolution, 3-bit stereo PCM audio and video compression.
 
-Version 2 increases the horizontal resolution by up to 4, replaces the chiptune music with ~9KHz, 3-bit PCM audio, introduces simple video compression with configurable quality settings, and uses a faster and easier to use encoding routines that can directly re-encode FFMPEG-compatible video to GBVP2 format.
+Version 2 increases the horizontal resolution by up to 4, replaces the chiptune music with ~9KHz, 3-bit PCM audio, introduces simple video compression with configurable quality settings, and uses a faster and easier to use encoding routines that can directly re-encode FFMPEG-compatible video to GBVP2 format. 
+
+# This fork is optimized for 1bbp (black and white) videos. It is not reccomended to use this fork for color videos. Please use the [original](https://github.com/LIJI32/GBVideoPlayer2) or [@frestr's](https://github.com/frestr/GBVideoPlayer2) fork instead.
 
 ## Examples
 
-You can grab compiled example ROMs from the [releases page](https://github.com/LIJI32/GBVideoPlayer2/releases) or [watch a video](https://youtu.be/iDd_aqpLf5Q)
+You can grab compiled example ROMs from the [releases page](https://github.com/Jenetrix/GBVideoPlayer2-BW/releases)
 
 ## Requirements
 
@@ -13,7 +15,7 @@ For playing a GBVP2 video ROM on hardware, an MBC5-compatible flash cart is requ
 
 For playing a GBVP2 video ROM on an emulator, you must use an accurate Game Boy Color emulator, such as recent versions of [SameBoy](https://sameboy.github.io) or [BGB](http://bgb.bircd.org). GBVP2 will not work on inaccurate emulators, such as VisualBoyAdvance or GameBoy Online.
 
-For encoding and building a video ROM, you will need a Make, a C compiler (Clang recommended), [rgbds](https://github.com/rednex/rgbds/releases/), and a recent version of [FFMPEG](http://ffmpeg.org/).
+For encoding and building a video ROM, you will need a Make, a C compiler (Clang recommended), [rgbds](https://github.com/rednex/rgbds/releases/), and a static binary of [FFMPEG](https://www.johnvansickle.com/ffmpeg/old-releases/) (4.4) located within the build folder.
 
 ## Format Specifications
 
@@ -38,7 +40,7 @@ make SOURCE=/path/to/my_video.mp4
 Optionally, you may specify `QUALITY` to reduce the file size or, alternatively, improve video quality:
 
 ```
-make SOURCE=/path/to/my_video.mp4 QUALITY=8
+make SOURCE=/path/to/my_video.mp4 QUALITY=0
 ```
 
-`QUALITY` can be any non-negative integer. The higher the value, the more aggressive the compression. A value of 0 performs no lossy compression after converting a frame to the player's format. The default value is 4.
+`QUALITY` can be any non-negative integer. The higher the value, the more aggressive the compression. A value of 0 performs no lossy compression after converting a frame to the player's format. This is usually not needed for Black and White videos as rgbds does a pretty good job of compressing those on it's own. The default value is 0.
